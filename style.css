@@ -1,0 +1,92 @@
+
+body {
+  background-image: url(logo/lrp.png);
+  background-color: #f3e9e9;
+  backdrop-filter:blur(5px);
+  background-size: 230ch;
+  background-position: center;
+  background-blend-mode: screen;
+}
+
+.ytbox{
+  color: white;
+  background-color: black;
+  width: 650PX;
+  border-radius: 20px;
+}
+
+.vbox{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
+  color: black;
+}
+.Visabox{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
+  color: black;
+}
+
+.box{
+        background-color: black;
+        height: 130px;
+        width: 900px;
+        margin-top: 30px;
+        color: white;
+        border-color:purple;
+        border-style: solid;
+        border-radius: 100px;
+        border-width: 10px;
+        padding: 20px;
+
+    }
+
+
+
+.discordbox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
+  color: black;
+}
+
+.social-row {
+  display: flex;
+  justify-content: space-between; /* left | center | right */
+  align-items: center;
+  max-width: 700px;
+  margin: 40px auto;
+}
+
+.social-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+  color: black;
+}
+
+.social-item img {
+  width: 42px;
+}
+
+.content {
+  display: flex;
+  justify-content: center;   /* center block */
+  padding: 20px;
+}
+
+
+
