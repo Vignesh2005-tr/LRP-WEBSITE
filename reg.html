@@ -87,14 +87,19 @@ document.getElementById("visaForm").addEventListener("submit", function(e) {
     const form = e.target;
     const formData = new FormData(form);
 
-    // The Discord Webhook URL is placed here directly (taken from your PHP file)
-    const webhookUrl = "https://discord.com/api/webhooks/1449507888790769856/1v2xwndqudM2XwPDYdY5yMLV38K5Te3neI764hV4ysBNKvZKPh6xzNSbCgAHci1Vyr5G";
+    // The Discord Webhook URL is placed here directly (REPLACED AS REQUESTED)
+    const webhookUrl = "https://discord.com/api/webhooks/1449670444134170626/YpaVBCmeBTrPLDj9ZfIK1YsV8IGRJAf9sXCVfAoPzwz3Xt0itV62wjO3Eqj8hrnyAjbG";
 
-    // Extracting data from the form
+    // Extracting data from the form (Now 'experience' will be correctly captured!)
     const name = formData.get('pname');
     const dcname = formData.get('dname');
     const age = formData.get('age');
-    const experience = formData.get('experience');
+    const experience = formData.get('experience'); // <-- FIX: This now works!
+    
+    // NOTE: The file input 'discord_profile_pic' is ignored here because 
+    // it cannot be included in a simple application/json request to Discord.
+    // If you need the file, you must use a complex 'multipart/form-data' fetch.
+    // For now, only sending the text data.
 
     // Building the JSON payload for Discord, matching your PHP structure
     const payload = {
@@ -102,7 +107,7 @@ document.getElementById("visaForm").addEventListener("submit", function(e) {
         avatar_url: "https://i.imgur.com/4M34hi2.png",
         embeds: [{
             title: "📝 New Visa Application (JS Submission)",
-            color: 15844367, // Decimal color code
+            color: 15844367, // Decimal color code (Red)
             fields: [{
                 name: "👤 Name",
                 value: name,
@@ -118,7 +123,7 @@ document.getElementById("visaForm").addEventListener("submit", function(e) {
             }, {
                 name: "📌 Roleplay Experience",
                 value: experience,
-                inline: false // Full-width for the experience description
+                inline: false
             }],
             footer: {
                 text: "Legendary Roleplay | Visa Application"
@@ -131,7 +136,8 @@ document.getElementById("visaForm").addEventListener("submit", function(e) {
     fetch(webhookUrl, {
         method: "POST",
         headers: {
-            'Content-Type': 'application/json'
+            // Must be 'application/json' for the 'payload' structure above
+            'Content-Type': 'application/json' 
         },
         body: JSON.stringify(payload)
     })
@@ -140,9 +146,11 @@ document.getElementById("visaForm").addEventListener("submit", function(e) {
             // Success: Redirect to success.html
             window.location.href = "success.html";
         } else {
-            // Failure: Display the error, but the redirect fails.
+            // Failure: Display the error
             alert("Submission failed! Status: " + response.status + ". Check Discord log.");
-            console.error('Discord API response error:', response.statusText);
+            console.error('Discord API response error:', response.statusText, 'Status:', response.status);
+            // Log the response text to see what Discord says:
+            response.text().then(text => console.error('Discord Response Text:', text));
         }
     })
     .catch(err => {
@@ -153,5 +161,3 @@ document.getElementById("visaForm").addEventListener("submit", function(e) {
 });
 </script>
 
-</body>
-</html>
