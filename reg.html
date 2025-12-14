@@ -13,7 +13,7 @@
 <img src="logo/lrpGIF.gif">
 <h3>VISA APPLY FORM 👇🏼</h3>
 
-<form id="visaForm" enctype="multipart/form-data">
+<form id="visaForm" enctype="multipart/form-data"> 
     <table border="1">
 
         <tr>
@@ -69,13 +69,13 @@
     </a>
 
     <a href="https://www.instagram.com/legendary.roleplay.samp?igsh=Zm45N3pzZjh5czVl"
-       target="_blank" class="social-item">
+        target="_blank" class="social-item">
         <img src="logo/instagram.png" alt="Instagram">
         <span>Instagram</span>
     </a>
 
     <a href="https://youtube.com/@legendarysamproleplayoffic6873?si=bAXFBKuRw1tk4TyA"
-       target="_blank" class="social-item">
+        target="_blank" class="social-item">
         <img src="logo/yt.png" alt="YouTube">
         <span>YouTube</span>
     </a>
@@ -83,7 +83,13 @@
 
 <script>
     const visaForm = document.getElementById('visaForm');
+    
+    // ⚠️ IMPORTANT SECURITY WARNING: 
+    // This URL is publicly shared. You must change it immediately in your Discord settings!
     const WEBHOOK_URL = 'https://discord.com/api/webhooks/1449670444134170626/YpaVBCmeBTrPLDj9ZfIK1YsV8IGRJAf9sXCVfAoPzwz3Xt0itV62wjO3Eqj8hrnyAjbG';
+    
+    // Role ID to be mentioned (tagged) in the Discord message
+    const ROLE_ID = '1449718757881806980'; 
 
     visaForm.addEventListener('submit', function(event) {
         event.preventDefault();
@@ -93,13 +99,17 @@
         const formData = new FormData(visaForm);
         const discordProfilePic = formData.get('discord_profile_pic');
         
+        // 1. Build the JSON payload for the embedded message and the role tag
         const payload = {
             username: 'Visa Application Bot',
-            avatar_url: 'https://i.imgur.com/your-bot-avatar.png', 
+            avatar_url: 'https://i.imgur.com/your-bot-avatar.png', // Replace with a real avatar URL
+            
+            // This is how you mention a role/user outside of an embed (must be a string)
+            content: `New Visa Application Received! <@&${ROLE_ID}>`, 
+            
             embeds: [{
                 title: "New VISA Application Received",
-                tag:1449718757881806980,
-                color: 3447003,
+                color: 3447003, // A nice blue color
                 fields: [
                     { name: "Applicant Name", value: formData.get('pname'), inline: true },
                     { name: "Discord Name", value: formData.get('dname'), inline: true },
@@ -110,14 +120,18 @@
             }]
         };
         
+        // 2. Prepare the final FormData for the webhook request
         const webhookFormData = new FormData();
         
+        // If a file was uploaded, append it to the form data
         if (discordProfilePic && discordProfilePic.name) {
             webhookFormData.append('file', discordProfilePic, discordProfilePic.name);
         }
 
+        // Append the JSON payload as a string under the key 'payload_json'
         webhookFormData.append('payload_json', JSON.stringify(payload));
 
+        // 3. Send the request
         fetch(WEBHOOK_URL, {
             method: 'POST',
             body: webhookFormData
@@ -126,9 +140,11 @@
             if (response.ok) {
                 alert('✅ Application submitted successfully! Thank you.');
                 visaForm.reset();
+                // Optional: Redirect the user to a "Thank You" page
+                // window.location.href = "success.html";
             } else {
                 console.error('Webhook error:', response.status, response.statusText);
-                alert('❌ Submission failed. Discord server error. Check console.');
+                alert(`❌ Submission failed. Discord server error: ${response.status}. Please check console.`);
             }
         })
         .catch(error => {
@@ -137,81 +153,6 @@
         });
     });
 </script>
-</body>
-</html>
-<script>
-document.getElementById("visaForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-
-    const form = e.target;
-    const formData = new FormData(form);
-
-    // The Discord Webhook URL is placed here directly (taken from your PHP file)
-    const webhookUrl = "https://discord.com/api/webhooks/1449507888790769856/1v2xwndqudM2XwPDYdY5yMLV38K5Te3neI764hV4ysBNKvZKPh6xzNSbCgAHci1Vyr5G";
-
-    // Extracting data from the form
-    const name = formData.get('pname');
-    const dcname = formData.get('dname');
-    const age = formData.get('age');
-    const experience = formData.get('experience');
-
-    // Building the JSON payload for Discord, matching your PHP structure
-    const payload = {
-        username: "LRP Visa System (JS)",
-        avatar_url: "https://i.imgur.com/4M34hi2.png",
-        embeds: [{
-            title: "📝 New Visa Application (JS Submission)",
-            color: 15844367, // Decimal color code
-            fields: [{
-                name: "👤 Name",
-                value: name,
-                inline: true
-            }, {
-                name: "🎮 Discord Name",
-                value: dcname,
-                inline: true
-            }, {
-                name: "🎂 Age",
-                value: age,
-                inline: true
-            }, {
-                name: "📌 Roleplay Experience",
-                value: experience,
-                inline: false // Full-width for the experience description
-            }],
-            footer: {
-                text: "Legendary Roleplay | Visa Application"
-            },
-            timestamp: new Date().toISOString()
-        }]
-    };
-
-    // Sending the request directly to the Discord API
-    fetch(webhookUrl, {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-    })
-    .then(response => {
-        if (response.ok) {
-            // Success: Redirect to success.html
-            window.location.href = "success.html";
-        } else {
-            // Failure: Display the error, but the redirect fails.
-            alert("Submission failed! Status: " + response.status + ". Check Discord log.");
-            console.error('Discord API response error:', response.statusText);
-        }
-    })
-    .catch(err => {
-        // Network failure (e.g., no internet)
-        alert("Network error: Could not reach Discord!");
-        console.error(err);
-    });
-});
-</script>
 
 </body>
 </html>
-
